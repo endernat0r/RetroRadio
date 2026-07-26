@@ -44,3 +44,11 @@ class Engine:
             return results[0]
         else:
             return None
+        
+    def radio_search_by_tag_and_play(self, tag, limit):
+        results = self.search_stations_by_tag(tag, limit)
+        if len(results) > 0:
+            self.play_station(results[0]["url_resolved"])
+            return results[0]   
+        else:
+            return None
