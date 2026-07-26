@@ -16,4 +16,3 @@ vlc = vlc.MediaPlayer(rj[0]["url_resolved"])
 vlc.play()
 
 close = input("Press Enter to close the player...")
-
