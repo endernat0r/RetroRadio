@@ -1,7 +1,7 @@
 from tkinter import font
 from RadioEngine import Engine
 import tkinter as tk
-from tkinter import Scale, StringVar
+from tkinter import *
 
 root = tk.Tk()
 root.title("Radio Engine V1.0")
@@ -12,9 +12,18 @@ status_text.set("No station playing")
 engine = Engine()
 current_results = []
 
-root.geometry("350x500")
+root.geometry("350x400")
 root.resizable(False, False)
 root.configure(bg="#121212")
+
+def open_volume_control():
+    top = Toplevel(root)
+    top.title("Volume Control")
+    top.geometry("100x80")
+    top.configure(bg="#121212")
+    scale = Scale(top, from_=0, to=100, orient=tk.HORIZONTAL, label="Volume", bg="#333333", fg="white", command=lambda val: engine.set_volume(int(val)))
+    scale.pack(pady=10)
+    scale.set(70)
 
 def search_by_tag():
     global current_results
@@ -40,7 +49,10 @@ def play_selected(event):
         engine.play_station(station["url_resolved"])
         status_text.set(f"Playing: {station['name']}")
 
-tk.Label(root, text="Retro Radio", font=("Helvetica", 20), bg="#121212", fg="white").pack(pady=20)
+volume_button = tk.Button(root, text="🔊", font=("Helvetica", 12), width=4, bg="#333333", fg="white", command=open_volume_control)
+volume_button.place(relx=1.0, rely=0.0, x=-5, y=5, anchor="ne")
+
+tk.Label(root, text="Retro Radio", font=("Helvetica", 20), bg="#121212", fg="white").pack(pady=(20, 10))
 
 tk.Label(root, font=("Courier", 12), borderwidth=2, relief="groove", bg="#0a2211", fg="#00ff66", textvariable=status_text).pack(ipadx=20, ipady=10, pady=10)
 
@@ -65,9 +77,5 @@ stopButton.pack(side=tk.LEFT, padx=10)
 
 resumeButton = tk.Button(button_frame, text="Resume", width=7, bg="#333333", fg="white", command=lambda: engine.play_station(engine.player.get_media().get_mrl()) if engine.player else None)
 resumeButton.pack(side=tk.LEFT, padx=10)
-
-scale = Scale(root, from_=0, to=100, orient=tk.HORIZONTAL, label="Volume", bg="#333333", fg="white", command=lambda val: engine.set_volume(int(val)))
-scale.pack(pady=10)
-scale.set(70)
 
 root.mainloop()
