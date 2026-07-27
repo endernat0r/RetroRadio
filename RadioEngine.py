@@ -5,19 +5,19 @@ class Engine:
     def __init__(self):
         self.player = None
 
-    def search_stations_by_name(self, name, limit):
+    def search_stations_by_name(self, name, limit, offset=0):
         rb = RadioBrowser()
         try:
-            results = rb.search(name=name, limit=limit, hidebroken=True)
+            results = rb.search(name=name, limit=limit, offset=offset, hidebroken=True)
         except Exception as e:
             print(f"Error occurred while searching for stations by name: {e}")
             results = []
         return results
 
-    def search_stations_by_tag(self, tag, limit):
+    def search_stations_by_tag(self, tag, limit, offset=0):
         rb = RadioBrowser()
         try:
-            results = rb.search(tag=tag, limit=limit, hidebroken=True)
+            results = rb.search(tag=tag, limit=limit, offset=offset, hidebroken=True)
         except Exception as e:
             print(f"Error occurred while searching for stations by tag: {e}")
             results = []
