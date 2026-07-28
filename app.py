@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import StringVar # Hata vermemesi için bu satır eklendi
 from RadioEngine import Engine
 import ui_helpers
+import ctypes
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("green")
@@ -44,8 +45,20 @@ def do_move(event):
 root.bind("<ButtonPress-1>", start_move)
 root.bind("<B1-Motion>", do_move)
 
+def force_taskbar_icon():
+    try:
+        hwnd = ctypes.windll.user32.GetParent(root.winfo_id())
+        style = ctypes.windll.user32.GetWindowLongW(hwnd, -20)
+        ctypes.windll.user32.SetWindowLongW(hwnd, -20, (style & ~0x00000080) | 0x00040000)
+        root.withdraw()
+        root.deiconify()
+    except:
+        pass
+
+root.after(10, force_taskbar_icon)
+
 volume_button = ctk.CTkButton(root, text="🔊", font=("Helvetica", 12), width=30, height=30, fg_color="#333333", text_color="white", command=lambda: ui_helpers.open_volume_control(root, engine))
-volume_button.place(relx=1.0, rely=0.0, x=-10, y=10, anchor="ne")
+volume_button.place(relx=1.0, rely=0.0, x=-70, y=10, anchor="ne")
 
 ctk.CTkLabel(root, text="Retro Radio", font=("Helvetica", 20, "bold"), text_color="white").pack(pady=(20, 10))
 
