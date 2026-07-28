@@ -1,6 +1,6 @@
 import customtkinter as ctk
 import tkinter as tk
-from tkinter import StringVar
+from tkinter import StringVar # Hata vermemesi için bu satır eklendi
 from RadioEngine import Engine
 import ui_helpers
 
@@ -25,17 +25,36 @@ ui_helpers.init_tray(root, engine, status_text)
 root.geometry("350x480")
 root.resizable(False, False)
 
+TRANSPARENT_COLOR = "#000001"
+
+root.configure(fg_color=TRANSPARENT_COLOR)
+root.wm_attributes("-transparentcolor", TRANSPARENT_COLOR)
+
+root.overrideredirect(True)
+
+def start_move(event):
+    root.x = event.x
+    root.y = event.y
+
+def do_move(event):
+    x = root.winfo_x() + (event.x - root.x)
+    y = root.winfo_y() + (event.y - root.y)
+    root.geometry(f"+{x}+{y}")
+
+root.bind("<ButtonPress-1>", start_move)
+root.bind("<B1-Motion>", do_move)
+
 volume_button = ctk.CTkButton(root, text="🔊", font=("Helvetica", 12), width=30, height=30, fg_color="#333333", text_color="white", command=lambda: ui_helpers.open_volume_control(root, engine))
 volume_button.place(relx=1.0, rely=0.0, x=-10, y=10, anchor="ne")
 
 ctk.CTkLabel(root, text="Retro Radio", font=("Helvetica", 20, "bold"), text_color="white").pack(pady=(20, 10))
 
-ctk.CTkLabel(root, font=("Courier", 12), border_width=2, border_color="#00ff66", fg_color="#0a2211", text_color="#00ff66", textvariable=status_text, corner_radius=6).pack(ipadx=20, ipady=10, pady=10)
+ctk.CTkLabel(root, text="", font=("Courier", 12), border_width=2, border_color="#00ff66", fg_color="#0a2211", text_color="#00ff66", textvariable=status_text, corner_radius=6).pack(ipadx=20, ipady=10, pady=10)
 
 entry = ctk.CTkEntry(root, width=200, text_color="white", placeholder_text="Enter search query")
 entry.pack(pady=10)
 
-listBox = tk.Listbox(root, width=40, height=6, fg="white", bg="#333333")
+listBox = tk.Listbox(root, width=32, height=7, fg="#00ff66", bg="#1a1a1a", font=("Courier", 13, "bold"), borderwidth=1, highlightthickness=1, highlightcolor="#00ff66", highlightbackground="#333333")
 listBox.pack(pady=10)
 listBox.bind("<<ListboxSelect>>", lambda event: ui_helpers.play_selected(event, listBox, engine, status_text))
 

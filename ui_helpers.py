@@ -7,7 +7,7 @@ from pystray import Menu, MenuItem
 
 image = Image.open("pnge.png")
 
-pageSize = 6
+pageSize = 7
 current_page = 1
 last_search_type = ""
 last_search_query = ""
