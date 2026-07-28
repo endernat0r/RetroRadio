@@ -1,10 +1,41 @@
-from tkinter import font
-from RadioEngine import Engine
+import threading
 import tkinter as tk
 from tkinter import *
+from tkinter import font
+from PIL import Image
+import pystray
+from pystray import Menu, MenuItem
+from RadioEngine import Engine
+
+image = Image.open("pnge.png")
+
+def after_click(icon, item):
+    if str(item) == "Show Retro Radio":
+        root.after(0, root.deiconify)
+        root.after(0, root.lift)
+    elif str(item) == "Stop Radio":
+        engine.stop_station()
+        status_text.set("Stopped via tray")
+    elif str(item) == "Exit":
+        icon.stop()
+        root.after(0, root.destroy)
+
+tray_menu = Menu(
+    MenuItem("Show Retro Radio", after_click, default=True),
+    MenuItem("Stop Radio", after_click),
+    MenuItem("Exit", after_click)
+)
+
+icon = pystray.Icon("Retro Radio", image, "Retro Radio", menu=tray_menu)
+threading.Thread(target=icon.run, daemon=True).start()
 
 root = tk.Tk()
 root.title("Radio Engine V1.0")
+
+def on_close():
+    root.withdraw()
+
+root.protocol("WM_DELETE_WINDOW", on_close)
 
 status_text = StringVar()
 status_text.set("No station playing")
