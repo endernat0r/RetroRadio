@@ -1,6 +1,7 @@
 import threading
 import tkinter as tk
 from tkinter import Toplevel, Scale
+import customtkinter as ctk
 from PIL import Image
 import pystray
 from pystray import Menu, MenuItem
@@ -49,13 +50,26 @@ def can_it_move_by_tag(engine, search_tag, page):
     return stations, back_button_active, forward_button_active
 
 def open_volume_control(root, engine):
-    top = Toplevel(root)
+    top = ctk.CTkToplevel(root)
     top.title("Volume Control")
-    top.geometry("100x80")
-    top.configure(bg="#121212")
-    scale = Scale(top, from_=0, to=100, orient=tk.HORIZONTAL, label="Volume", bg="#333333", fg="white", command=lambda val: engine.set_volume(int(val)))
-    scale.pack(pady=10)
-    scale.set(70)
+    top.geometry("180x100")
+    top.resizable(False, False)
+    top.configure(fg_color="#121212")
+
+    # Maybe I should have made it 100 but 70 is coler
+    initial_vol = 70
+    
+    label = ctk.CTkLabel(top, text=f"Volume: {initial_vol}%", text_color="white", font=("Helvetica", 12))
+    label.pack(pady=(10, 0))
+
+    def update_vol(val):
+        v = int(val)
+        engine.set_volume(v)
+        label.configure(text=f"Volume: {v}%")
+
+    slider = ctk.CTkSlider(top, from_=0, to=100, orientation="horizontal", command=update_vol)
+    slider.pack(pady=10)
+    slider.set(initial_vol)
 
 def search_by_tag(entry, listBox, backButton, forwardButton, engine):
     global last_search_type, last_search_query
