@@ -84,12 +84,14 @@ def search_by_name(entry, listBox, backButton, forwardButton, engine):
     load_page(1, listBox, backButton, forwardButton, engine)
 
 def play_selected(event, listBox, engine, status_text):
+    global marquee_text, marquee_index
     selection = listBox.curselection()
     if selection:
         index = selection[0]
         station = current_results[index]
         engine.play_station(station["url_resolved"])
-        status_text.set(f"Playing: {station['name']}")
+        marquee_text = f"Playing: {station['name']}"
+        marquee_index = 0
 
 def load_page(page, listBox, backButton, forwardButton, engine):
     global current_page, current_results
@@ -111,3 +113,20 @@ def load_page(page, listBox, backButton, forwardButton, engine):
         forwardButton.configure(state=tk.NORMAL)
     else:
         forwardButton.configure(state=tk.DISABLED)
+
+marquee_text = ""
+marquee_index = 0
+
+def start_marquee(root, status_text):
+    global marquee_index
+    if marquee_text:
+        display_length = 22
+        padded_text = marquee_text + "   ***   "
+        if len(padded_text) > display_length:
+            double_text = padded_text + padded_text
+            current_display = double_text[marquee_index:marquee_index + display_length]
+            status_text.set(current_display)
+            marquee_index = (marquee_index + 1) % len(padded_text)
+        else:
+            status_text.set(padded_text[:display_length])
+    root.after(250, lambda: start_marquee(root, status_text))

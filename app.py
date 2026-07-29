@@ -57,6 +57,9 @@ def force_taskbar_icon():
 
 root.after(10, force_taskbar_icon)
 
+ui_helpers.marquee_text = "No station playing"
+root.after(250, lambda: ui_helpers.start_marquee(root, status_text))
+
 volume_button = ctk.CTkButton(root, text="🔊", font=("Helvetica", 12), width=30, height=30, fg_color="#333333", text_color="white", command=lambda: ui_helpers.open_volume_control(root, engine))
 volume_button.place(relx=1.0, rely=0.0, x=-70, y=10, anchor="ne")
 
