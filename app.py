@@ -84,7 +84,7 @@ lang_combo = ctk.CTkComboBox(root, values=LANGUAGE_LIST, width=210, height=30, f
 lang_combo.set("Select Language")
 lang_combo.pack(pady=3)
 
-decade_combo = ctk.CTkComboBox(root, values=DECADE_LIST, width=210, height=30, fg_color="#1a1a1a", text_color="white", button_color="#333333", command=lambda choice: ui_helpers.set_combo_filter(choice, "tag_exact", listBox, backButton, forwardButton, engine))
+decade_combo = ctk.CTkComboBox(root, values=DECADE_LIST, width=210, height=30, fg_color="#1a1a1a", text_color="white", button_color="#333333", command=lambda choice: ui_helpers.set_combo_filter(choice, "decade", listBox, backButton, forwardButton, engine))
 decade_combo.set("Select Decade")
 decade_combo.pack(pady=3)
 

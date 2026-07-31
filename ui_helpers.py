@@ -95,7 +95,17 @@ active_filters = {}
 
 def apply_filters(engine, page):
     offset = (page - 1) * pageSize
-    stations = engine.search_stations_but_more_advanced_and_yeah_I_know_this_is_long_but_who_cares(active_filters, pageSize, offset)
+    query_filters = active_filters.copy()
+
+    tags = []
+    if "tag" in query_filters:
+        tags.append(query_filters.pop("tag"))
+    if "decade" in query_filters:
+        tags.append(query_filters.pop("decade"))
+    if tags:
+        query_filters["tag"] = ",".join(tags)
+
+    stations = engine.search_stations_but_more_advanced_and_yeah_I_know_this_is_long_but_who_cares(query_filters, pageSize, offset)
     back_button_active = (page > 1)
     forward_button_active = (len(stations) == pageSize)
     return stations, back_button_active, forward_button_active
