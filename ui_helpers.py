@@ -6,6 +6,7 @@ from PIL import Image
 import pystray
 from pystray import Menu, MenuItem
 import vlc
+import random
 
 image = Image.open("pnge.png")
 
@@ -221,3 +222,16 @@ def change_volume(delta, engine):
     current_volume = new_vol
     if new_vol > 0:
         is_muted = False
+
+bars = [" ", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+
+def update_visualizer(root, vis_text, engine):
+    if engine.player and engine.player.is_playing():
+        current = ""
+        for i in range(10):
+            current += random.choice(bars)
+        vis_text.set(current)
+    else:
+        vis_text.set("____________________")
+        
+    root.after(100, lambda: update_visualizer(root, vis_text, engine))

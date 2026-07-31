@@ -19,7 +19,10 @@ root.protocol("WM_DELETE_WINDOW", on_close)
 status_text = StringVar()
 status_text.set("No station playing")
 
-engine = Engine()
+vis_text = StringVar()
+vis_text.set("--------------------")
+
+engine = Engine()hello
 
 ui_helpers.init_tray(root, engine, status_text)
 
@@ -71,6 +74,9 @@ volume_button.place(relx=1.0, rely=0.0, x=-70, y=10, anchor="ne")
 ctk.CTkLabel(root, text="Retro Radio", font=("Helvetica", 20, "bold"), text_color="white").pack(pady=(20, 10))
 
 ctk.CTkLabel(root, text="", font=("Courier", 12), border_width=2, border_color="#00ff66", fg_color="#0a2211", text_color="#00ff66", textvariable=status_text, corner_radius=6).pack(ipadx=20, ipady=10, pady=10)
+
+ctk.CTkLabel(root, font=("Consolas", 16, "bold"), text_color="#00ff66", fg_color="transparent", textvariable=vis_text).pack(pady=(0, 10))
+root.after(100, lambda: ui_helpers.update_visualizer(root, vis_text, engine))
 
 genre_combo = ctk.CTkComboBox(root, values=GENRE_LIST, width=210, height=30, fg_color="#1a1a1a", text_color="white", button_color="#333333", command=lambda choice: ui_helpers.set_combo_filter(choice, "tag", listBox, backButton, forwardButton, engine))
 genre_combo.set("Select Genre")
