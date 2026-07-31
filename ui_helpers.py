@@ -84,10 +84,11 @@ def search_by_name(entry, listBox, backButton, forwardButton, engine):
     load_page(1, listBox, backButton, forwardButton, engine)
 
 def search_by_text(entry_text, search_type, listBox, backButton, forwardButton, engine):
-    if entry_text.strip():
-        active_filters[search_type] = entry_text.strip()
-    elif search_type in active_filters:
-        del active_filters[search_type]
+    text = entry_text.strip()
+    if text:
+        active_filters[search_type] = text
+    else:
+        active_filters.pop(search_type, None)
     load_page(1, listBox, backButton, forwardButton, engine)
 
 active_filters = {}
@@ -100,7 +101,11 @@ def apply_filters(engine, page):
     return stations, back_button_active, forward_button_active
 
 def set_combo_filter(choice, filter_key, listBox, backButton, forwardButton, engine):
-    active_filters[filter_key] = choice
+    if choice.startswith("Select") or choice in ["None", "All", "Any"]:
+        active_filters.pop(filter_key, None)
+    else:
+        active_filters[filter_key] = choice
+        
     load_page(1, listBox, backButton, forwardButton, engine)
 
 def play_selected(event, listBox, engine, status_text):

@@ -60,10 +60,10 @@ root.after(10, force_taskbar_icon)
 ui_helpers.marquee_text = "No station playing"
 root.after(250, lambda: ui_helpers.start_marquee(root, status_text))
 
-GENRE_LIST = ["jazz", "synthwave", "rock", "pop", "lofi", "classical", "metal", "hiphop", "chillout", "disco"]
-COUNTRY_LIST = ["Turkey", "United States", "Germany", "United Kingdom", "France", "Japan", "Brazil", "Italy"]
-LANGUAGE_LIST = ["turkish", "english", "german", "french", "spanish", "japanese"]
-DECADE_LIST = ["80s", "90s", "00s", "70s", "60s"]
+GENRE_LIST = ["None", "jazz", "synthwave", "rock", "pop", "lofi", "classical", "metal", "hiphop", "chillout", "disco"]
+COUNTRY_LIST = ["None", "Turkey", "United States", "Germany", "United Kingdom", "France", "Japan", "Brazil", "Italy"]
+LANGUAGE_LIST = ["None", "turkish", "english", "german", "french", "spanish", "japanese"]
+DECADE_LIST = ["None", "80s", "90s", "00s", "70s", "60s"]
 
 volume_button = ctk.CTkButton(root, text="🔊", font=("Helvetica", 12), width=30, height=30, fg_color="#333333", text_color="white", command=lambda: ui_helpers.open_volume_control(root, engine))
 volume_button.place(relx=1.0, rely=0.0, x=-70, y=10, anchor="ne")
