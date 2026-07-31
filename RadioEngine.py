@@ -23,6 +23,24 @@ class Engine:
             results = []
         return results
 
+    def search_stations_by_country(self, country, limit, offset=0):
+        rb = RadioBrowser()
+        try:
+            results = rb.search(country=country, limit=limit, offset=offset, hidebroken=True)
+        except Exception as e:
+            print(f"Error: {e}")
+            results = []
+        return results
+
+    def search_stations_by_language(self, language, limit, offset=0):
+        rb = RadioBrowser()
+        try:
+            results = rb.search(language=language, limit=limit, offset=offset, hidebroken=True)
+        except Exception as e:
+            print(f"Error: {e}")
+            results = []
+        return results
+
     def play_station(self, station_url):
         if self.player != None:
             self.player.stop()

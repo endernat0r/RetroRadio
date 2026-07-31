@@ -1,6 +1,6 @@
 import customtkinter as ctk
 import tkinter as tk
-from tkinter import StringVar # Hata vermemesi için bu satır eklendi
+from tkinter import StringVar #Sorry I forgot to write in english but it was just a note for myself
 from RadioEngine import Engine
 import ui_helpers
 import ctypes
@@ -23,7 +23,7 @@ engine = Engine()
 
 ui_helpers.init_tray(root, engine, status_text)
 
-root.geometry("350x480")
+root.geometry("350x700")
 root.resizable(False, False)
 
 TRANSPARENT_COLOR = "#000001"
@@ -60,12 +60,33 @@ root.after(10, force_taskbar_icon)
 ui_helpers.marquee_text = "No station playing"
 root.after(250, lambda: ui_helpers.start_marquee(root, status_text))
 
+GENRE_LIST = ["jazz", "synthwave", "rock", "pop", "lofi", "classical", "metal", "hiphop", "chillout", "disco"]
+COUNTRY_LIST = ["Turkey", "United States", "Germany", "United Kingdom", "France", "Japan", "Brazil", "Italy"]
+LANGUAGE_LIST = ["turkish", "english", "german", "french", "spanish", "japanese"]
+DECADE_LIST = ["80s", "90s", "00s", "70s", "60s"]
+
 volume_button = ctk.CTkButton(root, text="🔊", font=("Helvetica", 12), width=30, height=30, fg_color="#333333", text_color="white", command=lambda: ui_helpers.open_volume_control(root, engine))
 volume_button.place(relx=1.0, rely=0.0, x=-70, y=10, anchor="ne")
 
 ctk.CTkLabel(root, text="Retro Radio", font=("Helvetica", 20, "bold"), text_color="white").pack(pady=(20, 10))
 
 ctk.CTkLabel(root, text="", font=("Courier", 12), border_width=2, border_color="#00ff66", fg_color="#0a2211", text_color="#00ff66", textvariable=status_text, corner_radius=6).pack(ipadx=20, ipady=10, pady=10)
+
+genre_combo = ctk.CTkComboBox(root, values=GENRE_LIST, width=210, height=30, fg_color="#1a1a1a", text_color="white", button_color="#333333", command=lambda choice: ui_helpers.select_combo_option(choice, "tag", listBox, backButton, forwardButton, engine))
+genre_combo.set("Select Genre")
+genre_combo.pack(pady=3)
+
+country_combo = ctk.CTkComboBox(root, values=COUNTRY_LIST, width=210, height=30, fg_color="#1a1a1a", text_color="white", button_color="#333333", command=lambda choice: ui_helpers.select_combo_option(choice, "country", listBox, backButton, forwardButton, engine))
+country_combo.set("Select Country")
+country_combo.pack(pady=3)
+
+lang_combo = ctk.CTkComboBox(root, values=LANGUAGE_LIST, width=210, height=30, fg_color="#1a1a1a", text_color="white", button_color="#333333", command=lambda choice: ui_helpers.select_combo_option(choice, "language", listBox, backButton, forwardButton, engine))
+lang_combo.set("Select Language")
+lang_combo.pack(pady=3)
+
+decade_combo = ctk.CTkComboBox(root, values=DECADE_LIST, width=210, height=30, fg_color="#1a1a1a", text_color="white", button_color="#333333", command=lambda choice: ui_helpers.select_combo_option(choice, "tag", listBox, backButton, forwardButton, engine))
+decade_combo.set("Select Decade")
+decade_combo.pack(pady=3)
 
 entry = ctk.CTkEntry(root, width=200, text_color="white", placeholder_text="Enter search query")
 entry.pack(pady=10)

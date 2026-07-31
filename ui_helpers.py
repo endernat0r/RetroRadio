@@ -100,16 +100,23 @@ def load_page(page, listBox, backButton, forwardButton, engine):
         stations, back_active, forward_active = can_it_move_by_name(engine, last_search_query, page)
     elif last_search_type == "tag":
         stations, back_active, forward_active = can_it_move_by_tag(engine, last_search_query, page)
+    elif last_search_type == "country":
+        stations, back_active, forward_active = can_it_move_by_country(engine, last_search_query, page)
+    elif last_search_type == "language":
+        stations, back_active, forward_active = can_it_move_by_language(engine, last_search_query, page)
     else:
         return
+        
     current_page = page
     current_results = stations
     listBox.delete(0, tk.END)
     listBox.insert(tk.END, *[station["name"] for station in stations])
+    
     if back_active:
         backButton.configure(state=tk.NORMAL)
     else:
         backButton.configure(state=tk.DISABLED)
+        
     if forward_active:
         forwardButton.configure(state=tk.NORMAL)
     else:
@@ -131,3 +138,23 @@ def start_marquee(root, status_text):
         else:
             status_text.set(padded_text[:display_length])
     root.after(250, lambda: start_marquee(root, status_text))
+
+def can_it_move_by_country(engine, search_country, page):
+    offset = (page - 1) * pageSize
+    stations = engine.search_stations_by_country(search_country, pageSize, offset)
+    back_button_active = (page > 1)
+    forward_button_active = (len(stations) == pageSize)
+    return stations, back_button_active, forward_button_active
+
+def can_it_move_by_language(engine, search_language, page):
+    offset = (page - 1) * pageSize
+    stations = engine.search_stations_by_language(search_language, pageSize, offset)
+    back_button_active = (page > 1)
+    forward_button_active = (len(stations) == pageSize)
+    return stations, back_button_active, forward_button_active
+
+def select_combo_option(choice, search_type, listBox, backButton, forwardButton, engine):
+    global last_search_type, last_search_query
+    last_search_type = search_type
+    last_search_query = choice
+    load_page(1, listBox, backButton, forwardButton, engine)
