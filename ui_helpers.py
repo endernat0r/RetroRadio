@@ -90,7 +90,8 @@ def play_selected(event, listBox, engine, status_text):
         index = selection[0]
         station = current_results[index]
         engine.play_station(station["url_resolved"])
-        marquee_text = f"Playing: {station['name']}"
+        clean_name = station['name'].strip()
+        marquee_text = f"Playing: {clean_name}"
         marquee_index = 0
 
 def load_page(page, listBox, backButton, forwardButton, engine):
