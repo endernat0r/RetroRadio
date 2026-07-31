@@ -83,6 +83,26 @@ def search_by_name(entry, listBox, backButton, forwardButton, engine):
     last_search_query = entry.get()
     load_page(1, listBox, backButton, forwardButton, engine)
 
+def search_by_text(entry_text, search_type, listBox, backButton, forwardButton, engine):
+    if entry_text.strip():
+        active_filters[search_type] = entry_text.strip()
+    elif search_type in active_filters:
+        del active_filters[search_type]
+    load_page(1, listBox, backButton, forwardButton, engine)
+
+active_filters = {}
+
+def apply_filters(engine, page):
+    offset = (page - 1) * pageSize
+    stations = engine.search_stations_but_more_advanced_and_yeah_I_know_this_is_long_but_who_cares(active_filters, pageSize, offset)
+    back_button_active = (page > 1)
+    forward_button_active = (len(stations) == pageSize)
+    return stations, back_button_active, forward_button_active
+
+def set_combo_filter(choice, filter_key, listBox, backButton, forwardButton, engine):
+    active_filters[filter_key] = choice
+    load_page(1, listBox, backButton, forwardButton, engine)
+
 def play_selected(event, listBox, engine, status_text):
     global marquee_text, marquee_index
     selection = listBox.curselection()
@@ -96,27 +116,15 @@ def play_selected(event, listBox, engine, status_text):
 
 def load_page(page, listBox, backButton, forwardButton, engine):
     global current_page, current_results
-    if last_search_type == "name":
-        stations, back_active, forward_active = can_it_move_by_name(engine, last_search_query, page)
-    elif last_search_type == "tag":
-        stations, back_active, forward_active = can_it_move_by_tag(engine, last_search_query, page)
-    elif last_search_type == "country":
-        stations, back_active, forward_active = can_it_move_by_country(engine, last_search_query, page)
-    elif last_search_type == "language":
-        stations, back_active, forward_active = can_it_move_by_language(engine, last_search_query, page)
-    else:
-        return
-        
+    stations, back_active, forward_active = apply_filters(engine, page)
     current_page = page
     current_results = stations
     listBox.delete(0, tk.END)
     listBox.insert(tk.END, *[station["name"] for station in stations])
-    
     if back_active:
         backButton.configure(state=tk.NORMAL)
     else:
         backButton.configure(state=tk.DISABLED)
-        
     if forward_active:
         forwardButton.configure(state=tk.NORMAL)
     else:

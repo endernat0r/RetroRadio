@@ -72,19 +72,19 @@ ctk.CTkLabel(root, text="Retro Radio", font=("Helvetica", 20, "bold"), text_colo
 
 ctk.CTkLabel(root, text="", font=("Courier", 12), border_width=2, border_color="#00ff66", fg_color="#0a2211", text_color="#00ff66", textvariable=status_text, corner_radius=6).pack(ipadx=20, ipady=10, pady=10)
 
-genre_combo = ctk.CTkComboBox(root, values=GENRE_LIST, width=210, height=30, fg_color="#1a1a1a", text_color="white", button_color="#333333", command=lambda choice: ui_helpers.select_combo_option(choice, "tag", listBox, backButton, forwardButton, engine))
+genre_combo = ctk.CTkComboBox(root, values=GENRE_LIST, width=210, height=30, fg_color="#1a1a1a", text_color="white", button_color="#333333", command=lambda choice: ui_helpers.set_combo_filter(choice, "tag", listBox, backButton, forwardButton, engine))
 genre_combo.set("Select Genre")
 genre_combo.pack(pady=3)
 
-country_combo = ctk.CTkComboBox(root, values=COUNTRY_LIST, width=210, height=30, fg_color="#1a1a1a", text_color="white", button_color="#333333", command=lambda choice: ui_helpers.select_combo_option(choice, "country", listBox, backButton, forwardButton, engine))
+country_combo = ctk.CTkComboBox(root, values=COUNTRY_LIST, width=210, height=30, fg_color="#1a1a1a", text_color="white", button_color="#333333", command=lambda choice: ui_helpers.set_combo_filter(choice, "country", listBox, backButton, forwardButton, engine))
 country_combo.set("Select Country")
 country_combo.pack(pady=3)
 
-lang_combo = ctk.CTkComboBox(root, values=LANGUAGE_LIST, width=210, height=30, fg_color="#1a1a1a", text_color="white", button_color="#333333", command=lambda choice: ui_helpers.select_combo_option(choice, "language", listBox, backButton, forwardButton, engine))
+lang_combo = ctk.CTkComboBox(root, values=LANGUAGE_LIST, width=210, height=30, fg_color="#1a1a1a", text_color="white", button_color="#333333", command=lambda choice: ui_helpers.set_combo_filter(choice, "language", listBox, backButton, forwardButton, engine))
 lang_combo.set("Select Language")
 lang_combo.pack(pady=3)
 
-decade_combo = ctk.CTkComboBox(root, values=DECADE_LIST, width=210, height=30, fg_color="#1a1a1a", text_color="white", button_color="#333333", command=lambda choice: ui_helpers.select_combo_option(choice, "tag", listBox, backButton, forwardButton, engine))
+decade_combo = ctk.CTkComboBox(root, values=DECADE_LIST, width=210, height=30, fg_color="#1a1a1a", text_color="white", button_color="#333333", command=lambda choice: ui_helpers.set_combo_filter(choice, "tag_exact", listBox, backButton, forwardButton, engine))
 decade_combo.set("Select Decade")
 decade_combo.pack(pady=3)
 
@@ -104,10 +104,10 @@ backButton.pack(side=ctk.LEFT, padx=5)
 forwardButton = ctk.CTkButton(button_frame, text="Forward >>", width=100, fg_color="#333333", text_color="white", command=lambda: ui_helpers.load_page(ui_helpers.current_page + 1, listBox, backButton, forwardButton, engine))
 forwardButton.pack(side=ctk.RIGHT, padx=5)
 
-button = ctk.CTkButton(root, text="Search stations by tag", width=210, fg_color="#333333", text_color="white", command=lambda: ui_helpers.search_by_tag(entry, listBox, backButton, forwardButton, engine))
+button = ctk.CTkButton(root, text="Search stations by tag", width=210, fg_color="#333333", text_color="white", command=lambda: ui_helpers.search_by_text(entry.get(), "tag", listBox, backButton, forwardButton, engine))
 button.pack(pady=3)
 
-button2 = ctk.CTkButton(root, text="Search stations by name", width=210, fg_color="#333333", text_color="white", command=lambda: ui_helpers.search_by_name(entry, listBox, backButton, forwardButton, engine))
+button2 = ctk.CTkButton(root, text="Search stations by name", width=210, fg_color="#333333", text_color="white", command=lambda: ui_helpers.search_by_text(entry.get(), "name", listBox, backButton, forwardButton, engine))
 button2.pack(pady=3)
 
 button_frame2 = ctk.CTkFrame(root, fg_color="transparent")

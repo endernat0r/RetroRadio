@@ -54,3 +54,12 @@ class Engine:
     def set_volume(self, volume):
         if self.player != None:
             self.player.audio_set_volume(volume)
+
+    def search_stations_but_more_advanced_and_yeah_I_know_this_is_long_but_who_cares(self, filters, limit, offset=0):
+        rb = RadioBrowser()
+        try:
+            results = rb.search(limit=limit, offset=offset, hidebroken=True, **filters)
+        except Exception as e:
+            print(f"Error: {e}")
+            results = []
+        return results
