@@ -189,13 +189,18 @@ previous_volume = 70
 current_volume = 70
 
 def toggle_play_pause(engine):
+    global is_muted, previous_volume, current_volume
     if engine.player:
-        if engine.player.is_playing():
-            engine.stop_station()
+        if current_volume > 0:
+            previous_volume = current_volume
+            engine.set_volume(0)
+            current_volume = 0
+            is_muted = True
         else:
-            mrl = engine.player.get_media().get_mrl()
-            if mrl:
-                engine.play_station(mrl)
+            restore_vol = previous_volume if previous_volume > 0 else 70
+            engine.set_volume(restore_vol)
+            current_volume = restore_vol
+            is_muted = False
 
 def toggle_mute(engine):
     global is_muted, previous_volume, current_volume
