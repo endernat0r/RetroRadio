@@ -119,4 +119,14 @@ stopButton.pack(side=ctk.LEFT, padx=5)
 resumeButton = ctk.CTkButton(button_frame2, text="Resume", width=90, fg_color="#333333", text_color="white", command=lambda: engine.play_station(engine.player.get_media().get_mrl()) if engine.player else None)
 resumeButton.pack(side=ctk.LEFT, padx=5)
 
+def handle_space(event):
+    if root.focus_get() != entry:
+        ui_helpers.toggle_play_pause(engine)
+
+root.bind("<space>", handle_space)
+root.bind("<m>", lambda event: ui_helpers.toggle_mute(engine))
+root.bind("<M>", lambda event: ui_helpers.toggle_mute(engine))
+root.bind("<Up>", lambda event: ui_helpers.change_volume(10, engine))
+root.bind("<Down>", lambda event: ui_helpers.change_volume(-10, engine))
+
 root.mainloop()

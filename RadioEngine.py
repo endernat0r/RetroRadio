@@ -4,6 +4,7 @@ import vlc
 class Engine:
     def __init__(self):
         self.player = None
+        self.last_url = None
 
     def search_stations_by_name(self, name, limit, offset=0):
         rb = RadioBrowser()
@@ -44,6 +45,7 @@ class Engine:
     def play_station(self, station_url):
         if self.player != None:
             self.player.stop()
+        self.last_url = station_url
         self.player = vlc.MediaPlayer(station_url)
         self.player.play()
 

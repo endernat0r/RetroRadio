@@ -5,6 +5,7 @@ import customtkinter as ctk
 from PIL import Image
 import pystray
 from pystray import Menu, MenuItem
+import vlc
 
 image = Image.open("pnge.png")
 
@@ -65,6 +66,7 @@ def open_volume_control(root, engine):
     def update_vol(val):
         v = int(val)
         engine.set_volume(v)
+        ui_helpers.current_volume = v
         label.configure(text=f"Volume: {v}%")
 
     slider = ctk.CTkSlider(top, from_=0, to=100, orientation="horizontal", command=update_vol)
@@ -181,3 +183,36 @@ def select_combo_option(choice, search_type, listBox, backButton, forwardButton,
     last_search_type = search_type
     last_search_query = choice
     load_page(1, listBox, backButton, forwardButton, engine)
+
+is_muted = False
+previous_volume = 70
+current_volume = 70
+
+def toggle_play_pause(engine):
+    if engine.player:
+        if engine.player.is_playing():
+            engine.stop_station()
+        else:
+            mrl = engine.player.get_media().get_mrl()
+            if mrl:
+                engine.play_station(mrl)
+
+def toggle_mute(engine):
+    global is_muted, previous_volume, current_volume
+    if is_muted:
+        engine.set_volume(previous_volume)
+        current_volume = previous_volume
+        is_muted = False
+    else:
+        previous_volume = current_volume
+        engine.set_volume(0)
+        current_volume = 0
+        is_muted = True
+
+def change_volume(delta, engine):
+    global current_volume, is_muted
+    new_vol = max(0, min(100, current_volume + delta))
+    engine.set_volume(new_vol)
+    current_volume = new_vol
+    if new_vol > 0:
+        is_muted = False
