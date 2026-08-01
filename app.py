@@ -22,7 +22,7 @@ status_text.set("No station playing")
 vis_text = StringVar()
 vis_text.set("--------------------")
 
-engine = Engine()hello
+engine = Engine()
 
 ui_helpers.init_tray(root, engine, status_text)
 
@@ -96,10 +96,12 @@ decade_combo.pack(pady=3)
 
 entry = ctk.CTkEntry(root, width=200, text_color="white", placeholder_text="Enter search query")
 entry.pack(pady=10)
+entry.bind("<Return>", lambda event: ui_helpers.search_by_text(entry.get(), "name", listBox, backButton, forwardButton, engine))
 
 listBox = tk.Listbox(root, width=32, height=7, fg="#00ff66", bg="#1a1a1a", font=("Courier", 13, "bold"), borderwidth=1, highlightthickness=1, highlightcolor="#00ff66", highlightbackground="#333333")
 listBox.pack(pady=10)
-listBox.bind("<<ListboxSelect>>", lambda event: ui_helpers.play_selected(event, listBox, engine, status_text))
+listBox.bind("<Double-Button-1>", lambda event: ui_helpers.play_selected(event, listBox, engine, status_text))
+listBox.bind("<Return>", lambda event: ui_helpers.play_selected(event, listBox, engine, status_text))
 
 button_frame = ctk.CTkFrame(root, fg_color="transparent")
 button_frame.pack(pady=5)

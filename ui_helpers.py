@@ -7,6 +7,8 @@ import pystray
 from pystray import Menu, MenuItem
 import vlc
 import random
+import math
+import time
 
 image = Image.open("pnge.png")
 
@@ -58,16 +60,16 @@ def open_volume_control(root, engine):
     top.resizable(False, False)
     top.configure(fg_color="#121212")
 
-    # Maybe I should have made it 100 but 70 is coler
     initial_vol = 70
     
     label = ctk.CTkLabel(top, text=f"Volume: {initial_vol}%", text_color="white", font=("Helvetica", 12))
     label.pack(pady=(10, 0))
 
     def update_vol(val):
+        global current_volume
         v = int(val)
         engine.set_volume(v)
-        ui_helpers.current_volume = v
+        current_volume = v
         label.configure(text=f"Volume: {v}%")
 
     slider = ctk.CTkSlider(top, from_=0, to=100, orientation="horizontal", command=update_vol)
@@ -226,12 +228,20 @@ def change_volume(delta, engine):
 bars = [" ", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
 
 def update_visualizer(root, vis_text, engine):
-    if engine.player and engine.player.is_playing():
+    if engine.player and engine.player.is_playing() and current_volume > 0:
+        t = time.time()
+        beat = abs(math.sin(t * 3.5)) + abs(math.cos(t * 5))
         current = ""
-        for i in range(10):
-            current += random.choice(bars)
+        for i in range(12):
+            max_idx = int((beat / 2) * (current_volume / 100) * 7)
+            if max_idx < 1:
+                max_idx = 1
+            if max_idx > 7:
+                max_idx = 7
+            idx = random.randint(0, max_idx)
+            current += bars[idx]
         vis_text.set(current)
     else:
         vis_text.set("____________________")
         
-    root.after(100, lambda: update_visualizer(root, vis_text, engine))
+    root.after(80, lambda: update_visualizer(root, vis_text, engine))
